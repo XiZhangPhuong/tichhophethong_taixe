@@ -15,16 +15,13 @@
         android:padding="10dp"
         android:layout_alignParentRight="true"
         android:switchMinWidth="60dp"
-        android:checked="true"
-
-        />
+        android:checked="true" />
 
     <RelativeLayout
         android:id="@+id/view_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/switch2"
-        >
+        android:layout_below="@id/switch2">
 
       <androidx.cardview.widget.CardView
           android:layout_width="wrap_content"

@@ -1,5 +1,6 @@
 package com.example.fastfooddelivery2025.Fragment;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,11 +15,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.fastfooddelivery2025.Adapter.OrderAdapter;
+import com.example.fastfooddelivery2025.Data.DataSharedPreferences;
 import com.example.fastfooddelivery2025.Model.Order_FB;
+import com.example.fastfooddelivery2025.Model.Staff;
 import com.example.fastfooddelivery2025.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,16 +36,18 @@ import java.util.List;
 
 
 public class OrderFragment extends Fragment {
-private View mView;
-private Switch switch2;
-private RecyclerView rcv_order;
-private ImageView imageView_call;
-private Button btn_dismiss,btn_confirm;
-private TextView txt_name,txt_phone,txt_address,txt_total,txt_check;
-private OrderAdapter orderAdapter;
-private final DatabaseReference dataOrder = FirebaseDatabase.getInstance().getReference("Order");
-private List<Order_FB> list = new ArrayList<>();
-private Order_FB order_fb;
+    private View mView;
+    private Switch switch2;
+    private RecyclerView rcv_order;
+    private ImageView imageView_call;
+    private Button btn_dismiss,btn_confirm;
+    RelativeLayout view_main;
+    private TextView txt_name,txt_phone,txt_address,txt_total,txt_check;
+    private OrderAdapter orderAdapter;
+    private final DatabaseReference dataOrder = FirebaseDatabase.getInstance().getReference("Order");
+    private List<Order_FB> list = new ArrayList<>();
+    private Order_FB order_fb;
+    int i = 0;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,7 +62,8 @@ private Order_FB order_fb;
         btn_dismiss = mView.findViewById(R.id.btn_dismiss);
         btn_confirm = mView.findViewById(R.id.btn_confirm);
         txt_check = mView.findViewById(R.id.txt_check);
-
+        btn_dismiss = mView.findViewById(R.id.btn_dismiss);
+        view_main = mView.findViewById(R.id.view_main);
         Picasso.get().load("https://st2.depositphotos.com/5834696/11681/v/950/depositphotos_116817166-stock-illustration-phone-call-vector-icon2.jpg").into(imageView_call);
         checkView();
         dataOrder.addValueEventListener(new ValueEventListener() {
@@ -70,26 +77,53 @@ private Order_FB order_fb;
                 if (order_fb == null) {
                     return;
                 }
-                    txt_check.setText("Bạn đã nhận được đơn hàng");
-                    rcv_order.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-                    rcv_order.setHasFixedSize(true);
+                txt_check.setText("Bạn đã nhận được đơn hàng");
+                rcv_order.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                rcv_order.setHasFixedSize(true);
 
-                    for(int i = 0;i<list.size();i++){
-                        if(list.get(i).getCheck()==1){
-                            orderAdapter = new OrderAdapter(getContext(), list.get(i).getListFood());
-                            rcv_order.setAdapter(orderAdapter);
-                            orderAdapter.notifyDataSetChanged();
-                            txt_name.setText(list.get(i).getUser().getFullName());
-                            txt_phone.setText(list.get(i).getUser().getPhoneNumber());
-                            txt_address.setText(list.get(i).getAddress_order());
-                            txt_total.setText(list.get(i).getTotal_cart() + " ");
-                        }
+                for(i = 0;i<list.size();i++){
+                    if(list.get(i).getCheck()==1){
+                        orderAdapter = new OrderAdapter(getContext(), list.get(i).getListFood());
+                        rcv_order.setAdapter(orderAdapter);
+                        orderAdapter.notifyDataSetChanged();
+                        txt_name.setText(list.get(i).getUser().getFullName());
+                        txt_phone.setText(list.get(i).getUser().getPhoneNumber());
+                        txt_address.setText(list.get(i).getAddress_order());
+                        txt_total.setText(list.get(i).getTotal_cart() + " ");
+                        return;
                     }
+                }
 
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Staff taixe = DataSharedPreferences.getUser(getContext(), "DRIVER");
+                btn_confirm.setText("Đã giao");
+                Order_FB fb = list.get(i);
+                fb.getStaff().setId_staff(taixe.getId_staff());
+                fb.getStaff().setFullName_staff(taixe.getFullName_staff());
+                fb.getStaff().setPhoneNumber(taixe.getPhoneNumber());
+                dataOrder.push().setValue(fb);
+                btn_dismiss.setVisibility(View.GONE);
+            }
+        });
+
+        btn_dismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                i++;
+                if(list.size() - 1 < i)
+                    i = 0;
+                orderAdapter = new OrderAdapter(getContext(), list.get(i).getListFood());
+                rcv_order.setAdapter(orderAdapter);
+                orderAdapter.notifyDataSetChanged();
             }
         });
 
@@ -101,8 +135,10 @@ private Order_FB order_fb;
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(switch2.isChecked()){
                     txt_check.setText("Ứng dụng đang hoạt động");
+                    view_main.setVisibility(View.VISIBLE);
                 }else{
                     txt_check.setText("Bạn đã ngưng nhận đơn");
+                    view_main.setVisibility(View.INVISIBLE);
                 }
             }
         });

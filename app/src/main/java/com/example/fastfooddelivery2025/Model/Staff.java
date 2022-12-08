@@ -4,7 +4,7 @@ public class Staff {
     private String id_staff;
     private String fullName_staff;
     private String phoneNumber;
-
+    private String password;
     public Staff(String id_staff, String fullName_staff, String phoneNumber) {
         this.id_staff = id_staff;
         this.fullName_staff = fullName_staff;
@@ -36,5 +36,13 @@ public class Staff {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

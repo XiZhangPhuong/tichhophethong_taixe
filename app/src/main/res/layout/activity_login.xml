@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="6sp"
+    android:background="@color/white">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:src="@drawable/shipment"/>
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/custom"
+        android:hint="Phone Number"
+        android:inputType="text"
+        android:text="123"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:drawablePadding="10dp"
+        android:layout_marginLeft="45dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_marginRight="45dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"/>
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:background="@drawable/custom"
+        android:hint="Password"
+        android:text="123"
+        android:drawablePadding="10dp"
+        android:layout_gravity="center"
+        android:inputType="textPassword"
+        android:layout_marginLeft="45dp"
+        android:paddingStart="20dp"
+        android:layout_marginRight="45dp"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="20dp" />
+    <!--<CheckBox
+        android:id="@+id/ckb_luu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="45dp"
+        android:checked="true"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/holo_orange_dark"
+        android:textColor="@color/black"
+        android:text="Bạn có lưu tài khoản không"/>-->
+
+    <Button
+        android:id="@+id/btnlogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginRight="45dp"
+        app:backgroundTint="#ff1a1a"
+        android:text="Đăng nhập"
+        android:textAllCaps="false"
+        android:background="@drawable/custom"
+        android:textSize="15dp" />
+
+
+</LinearLayout>
