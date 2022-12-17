@@ -1,5 +1,7 @@
 package com.example.fastfooddelivery2025;
 
+import static com.example.fastfooddelivery2025.MainActivity.KeyUser;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -60,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                     if(taixe.getPhoneNumber().trim().equals(username) && taixe.getPassword().trim().equals(password)){
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
-                        DataSharedPreferences.setUser(LoginActivity.this,taixe,"DRIVER");
+                        DataSharedPreferences.setUser(LoginActivity.this,taixe,KeyUser);
                         check = true;
                         break;
                     }

@@ -224,6 +224,19 @@
                          android:textColor="@color/white"
                          android:layout_weight="1"
                          android:textSize="15dp" />
+                     <Button
+                         android:id="@+id/btn_dagiao"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_gravity="center"
+                         android:background="@drawable/custom_button"
+                         app:backgroundTint="#ff1a1a"
+                         android:text="Đã Giao"
+                         android:visibility="gone"
+                         android:textAllCaps="false"
+                         android:textColor="@color/white"
+                         android:layout_weight="1"
+                         android:textSize="15dp" />
 
                  </LinearLayout>
 

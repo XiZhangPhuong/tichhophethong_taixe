@@ -40,14 +40,16 @@ public class OrderFragment extends Fragment {
     private Switch switch2;
     private RecyclerView rcv_order;
     private ImageView imageView_call;
-    private Button btn_dismiss,btn_confirm;
+    private Button btn_dismiss,btn_confirm,btn_dagiao;
     RelativeLayout view_main;
     private TextView txt_name,txt_phone,txt_address,txt_total,txt_check;
     private OrderAdapter orderAdapter;
-    private final DatabaseReference dataOrder = FirebaseDatabase.getInstance().getReference("Order");
+    private DatabaseReference dataOrder = FirebaseDatabase.getInstance().getReference("Order"),dataHistory = FirebaseDatabase.getInstance().getReference("History");
     private List<Order_FB> list = new ArrayList<>();
     private Order_FB order_fb;
     int i = 0;
+    boolean checkdung = true;
+    boolean checktaixe = false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,34 +66,51 @@ public class OrderFragment extends Fragment {
         txt_check = mView.findViewById(R.id.txt_check);
         btn_dismiss = mView.findViewById(R.id.btn_dismiss);
         view_main = mView.findViewById(R.id.view_main);
+        btn_dagiao = mView.findViewById(R.id.btn_dagiao);
         Picasso.get().load("https://st2.depositphotos.com/5834696/11681/v/950/depositphotos_116817166-stock-illustration-phone-call-vector-icon2.jpg").into(imageView_call);
         checkView();
         dataOrder.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                list.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    order_fb = ds.getValue(Order_FB.class);
-                    list.add(order_fb);
-                }
-                if (order_fb == null) {
-                    return;
-                }
-                txt_check.setText("Bạn đã nhận được đơn hàng");
-                rcv_order.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-                rcv_order.setHasFixedSize(true);
-
-                for(i = 0;i<list.size();i++){
-                    if(list.get(i).getCheck()==1){
-                        orderAdapter = new OrderAdapter(getContext(), list.get(i).getListFood());
-                        rcv_order.setAdapter(orderAdapter);
-                        orderAdapter.notifyDataSetChanged();
-                        txt_name.setText(list.get(i).getUser().getFullName());
-                        txt_phone.setText(list.get(i).getUser().getPhoneNumber());
-                        txt_address.setText(list.get(i).getAddress_order());
-                        txt_total.setText(list.get(i).getTotal_cart() + " ");
-                        return;
+                if(checkdung) {
+                    list.clear();
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        order_fb = ds.getValue(Order_FB.class);
+                        if(order_fb.getCheck() == 2 && order_fb.getStaff().getPhoneNumber().equals(DataSharedPreferences.getUser(getContext(),"DRIVER").getPhoneNumber())){
+                            btn_dismiss.setVisibility(View.GONE);
+                            btn_confirm.setVisibility(View.GONE);
+                            btn_dagiao.setVisibility(View.VISIBLE);
+                            rcv_order.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                            orderAdapter = new OrderAdapter(getContext(), order_fb.getListFood());
+                            rcv_order.setAdapter(orderAdapter);
+                            txt_name.setText(order_fb.getUser().getFullName());
+                            txt_phone.setText(order_fb.getUser().getPhoneNumber());
+                            txt_address.setText(order_fb.getAddress_order());
+                            txt_total.setText(order_fb.getTotal_cart() + " ");
+                            orderAdapter.notifyDataSetChanged();
+                            checktaixe = true;
+                            return;
+                        }
+                        if (order_fb.getCheck() == 1)
+                            list.add(order_fb);
                     }
+                    txt_check.setText("Bạn đã nhận được đơn hàng");
+                    rcv_order.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                    rcv_order.setHasFixedSize(true);
+
+                    for (i = 0; i < list.size(); i++) {
+                        if (list.get(i).getCheck() == 1) {
+                            orderAdapter = new OrderAdapter(getContext(), list.get(i).getListFood());
+                            rcv_order.setAdapter(orderAdapter);
+                            orderAdapter.notifyDataSetChanged();
+                            txt_name.setText(list.get(i).getUser().getFullName());
+                            txt_phone.setText(list.get(i).getUser().getPhoneNumber());
+                            txt_address.setText(list.get(i).getAddress_order());
+                            txt_total.setText(list.get(i).getTotal_cart() + " ");
+                            return;
+                        }
+                    }
+                    i = 0;
                 }
 
             }
@@ -104,14 +123,20 @@ public class OrderFragment extends Fragment {
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(list.size() == 0)
+                    return;
+                btn_dismiss.setVisibility(View.GONE);
+                btn_confirm.setVisibility(View.GONE);
+                btn_dagiao.setVisibility(View.VISIBLE);
                 Staff taixe = DataSharedPreferences.getUser(getContext(), "DRIVER");
-                btn_confirm.setText("Đã giao");
+
                 Order_FB fb = list.get(i);
                 fb.getStaff().setId_staff(taixe.getId_staff());
                 fb.getStaff().setFullName_staff(taixe.getFullName_staff());
                 fb.getStaff().setPhoneNumber(taixe.getPhoneNumber());
-                dataOrder.push().setValue(fb);
-                btn_dismiss.setVisibility(View.GONE);
+                fb.setCheck(2);
+                dataOrder.child(fb.getId_order()).setValue(fb);
+                checkdung = false;
             }
         });
 
@@ -121,12 +146,54 @@ public class OrderFragment extends Fragment {
                 i++;
                 if(list.size() - 1 < i)
                     i = 0;
+                if(list.size() == 0)
+                    return;
                 orderAdapter = new OrderAdapter(getContext(), list.get(i).getListFood());
                 rcv_order.setAdapter(orderAdapter);
                 orderAdapter.notifyDataSetChanged();
+
             }
         });
+        btn_dagiao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkdung = true;
+                orderAdapter = new OrderAdapter(getContext(),new ArrayList<>());
+                rcv_order.setAdapter(orderAdapter);
+                orderAdapter.notifyDataSetChanged();
+                txt_name.setText(" ");
+                txt_phone.setText(" ");
+                txt_address.setText(" ");
+                txt_total.setText(" ");
+                btn_dismiss.setVisibility(View.VISIBLE);
+                btn_confirm.setVisibility(View.VISIBLE);
+                btn_dagiao.setVisibility(View.GONE);
 
+                if(checktaixe){
+                    order_fb.setCheck(3);
+                    dataOrder.child(order_fb.getId_order()).setValue(order_fb);
+                    dataHistory.child(order_fb.getId_order()).setValue(order_fb);
+                    dataOrder.child(order_fb.getId_order()).removeValue();
+                    return;
+                }
+
+                Order_FB fb = list.get(i);
+                fb.setCheck(3);
+                dataOrder.child(fb.getId_order()).setValue(fb);
+                dataHistory.child(order_fb.getId_order()).setValue(order_fb);
+                dataOrder.child(order_fb.getId_order()).removeValue();
+                i++;
+                if(list.size() - 1 < i)
+                    i = 0;
+                if(list.size() == 0) {
+                    return;
+                }
+                orderAdapter = new OrderAdapter(getContext(), list.get(i).getListFood());
+                rcv_order.setAdapter(orderAdapter);
+                orderAdapter.notifyDataSetChanged();
+
+            }
+        });
         return mView;
     }
     private void checkView(){
@@ -143,12 +210,5 @@ public class OrderFragment extends Fragment {
             }
         });
     }
-    private int checkListOrder(){
-        for(Order_FB o : list){
-            if(o.getCheck()==1){
-                return 1;
-            }
-        }
-        return 0;
-    }
+
 }
