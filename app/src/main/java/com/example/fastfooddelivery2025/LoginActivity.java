@@ -1,5 +1,6 @@
 package com.example.fastfooddelivery2025;
 
+import static com.example.fastfooddelivery2025.InitData.referenceAccountEmployee;
 import static com.example.fastfooddelivery2025.MainActivity.KeyUser;
 
 import android.content.Context;
@@ -27,7 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity {
     private EditText edt_username,edt_password;
     private Button btn_login;
-    private DatabaseReference reference;
     private CheckBox cb;
     private ProgressBar pb;
     private Staff taixe = null;
@@ -38,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
         edt_username = findViewById(R.id.username);
         edt_password = findViewById(R.id.password);
         btn_login = findViewById(R.id.btnlogin);
-        reference = FirebaseDatabase.getInstance("https://fastfooddelivery-646b3-default-rtdb.asia-southeast1.firebasedatabase.app").getReference().child("AccountEmployee");
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void CheckTaiKhoan(String username, String password) {
-        reference.addValueEventListener(new ValueEventListener() {
+        referenceAccountEmployee.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean check = false;
@@ -64,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                         DataSharedPreferences.setUser(LoginActivity.this,taixe,KeyUser);
                         check = true;
+                        finish();
                         break;
                     }
                 }

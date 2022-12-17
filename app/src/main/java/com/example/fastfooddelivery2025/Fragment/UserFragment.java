@@ -1,5 +1,6 @@
 package com.example.fastfooddelivery2025.Fragment;
 
+import static com.example.fastfooddelivery2025.InitData.referenceHistory;
 import static com.example.fastfooddelivery2025.MainActivity.KeyUser;
 
 import android.content.DialogInterface;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.fastfooddelivery2025.AcountActivity;
 import com.example.fastfooddelivery2025.Adapter.FunctionUser_Adapter;
 import com.example.fastfooddelivery2025.Data.DataSharedPreferences;
 import com.example.fastfooddelivery2025.HistoryActivity;
@@ -59,7 +61,7 @@ import java.util.Locale;
 
 public class UserFragment extends Fragment {
     private View mView;
-    private DatabaseReference data_Function_user,data_chart ;
+    private DatabaseReference data_Function_user ;
     private List<FunctionUser> listFun = new ArrayList<>();
     private FunctionUser_Adapter functionUser_adapter;
     private MainActivity mMainActivity;
@@ -84,8 +86,8 @@ public class UserFragment extends Fragment {
 
         Staff staff = DataSharedPreferences.getUser(getContext(),KeyUser);
 
-        tv_id_user.setText("ID"+staff.getId_staff());
-        tv_phone_user.setText("Phone:" +staff.getPhoneNumber());
+        tv_id_user.setText("ID: "+staff.getId_staff());
+        tv_phone_user.setText("Phone: " +staff.getPhoneNumber());
         tv_name_user.setText(staff.getFullName_staff().toUpperCase(Locale.ROOT));
 
         setupCharView();
@@ -101,9 +103,7 @@ public class UserFragment extends Fragment {
 
 
     private void setupCharView() {
-
-        data_chart = FirebaseDatabase.getInstance().getReference("History");
-        data_chart.addValueEventListener(new ValueEventListener() {
+        referenceHistory.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int month;
@@ -219,17 +219,7 @@ public class UserFragment extends Fragment {
                     case 1 : startActivity(new Intent(getContext(), HistoryActivity.class));
                         break;
 
-                    case 2 :
-
-                        break;
-
-                    case 3 :
-                        break;
-
-                    case 4 :
-                        break;
-
-                    case 5:
+                    case 5: startActivity(new Intent(getContext(), AcountActivity.class));
                         break;
 
                     case 6:

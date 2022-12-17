@@ -1,5 +1,8 @@
 package com.example.fastfooddelivery2025.Fragment;
 
+import static com.example.fastfooddelivery2025.InitData.referenceHistory;
+import static com.example.fastfooddelivery2025.InitData.referenceOrder;
+
 import android.app.AlertDialog;
 import android.os.Bundle;
 
@@ -44,7 +47,6 @@ public class OrderFragment extends Fragment {
     RelativeLayout view_main;
     private TextView txt_name,txt_phone,txt_address,txt_total,txt_check;
     private OrderAdapter orderAdapter;
-    private DatabaseReference dataOrder = FirebaseDatabase.getInstance().getReference("Order"),dataHistory = FirebaseDatabase.getInstance().getReference("History");
     private List<Order_FB> list = new ArrayList<>();
     private Order_FB order_fb;
     int i = 0;
@@ -69,7 +71,7 @@ public class OrderFragment extends Fragment {
         btn_dagiao = mView.findViewById(R.id.btn_dagiao);
         Picasso.get().load("https://st2.depositphotos.com/5834696/11681/v/950/depositphotos_116817166-stock-illustration-phone-call-vector-icon2.jpg").into(imageView_call);
         checkView();
-        dataOrder.addValueEventListener(new ValueEventListener() {
+        referenceOrder.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(checkdung) {
@@ -135,7 +137,7 @@ public class OrderFragment extends Fragment {
                 fb.getStaff().setFullName_staff(taixe.getFullName_staff());
                 fb.getStaff().setPhoneNumber(taixe.getPhoneNumber());
                 fb.setCheck(2);
-                dataOrder.child(fb.getId_order()).setValue(fb);
+                referenceOrder.child(fb.getId_order()).setValue(fb);
                 checkdung = false;
             }
         });
@@ -171,17 +173,17 @@ public class OrderFragment extends Fragment {
 
                 if(checktaixe){
                     order_fb.setCheck(3);
-                    dataOrder.child(order_fb.getId_order()).setValue(order_fb);
-                    dataHistory.child(order_fb.getId_order()).setValue(order_fb);
-                    dataOrder.child(order_fb.getId_order()).removeValue();
+                    referenceOrder.child(order_fb.getId_order()).setValue(order_fb);
+                    referenceHistory.child(order_fb.getId_order()).setValue(order_fb);
+                    referenceOrder.child(order_fb.getId_order()).removeValue();
                     return;
                 }
 
                 Order_FB fb = list.get(i);
                 fb.setCheck(3);
-                dataOrder.child(fb.getId_order()).setValue(fb);
-                dataHistory.child(order_fb.getId_order()).setValue(order_fb);
-                dataOrder.child(order_fb.getId_order()).removeValue();
+                referenceOrder.child(fb.getId_order()).setValue(fb);
+                referenceHistory.child(order_fb.getId_order()).setValue(order_fb);
+                referenceOrder.child(order_fb.getId_order()).removeValue();
                 i++;
                 if(list.size() - 1 < i)
                     i = 0;

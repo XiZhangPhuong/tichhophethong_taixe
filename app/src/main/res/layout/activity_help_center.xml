@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HistoryActivity">
+    tools:context=".HelpCenterActivity">
     <RelativeLayout
-        android:id="@+id/_realative"
+        android:id="@+id/_realativeHelp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/holo_blue_dark"
@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Lịch sử giao hàng"
+            android:text="Trung tâm trợ giúp"
             android:textColor="@color/white"
             android:textSize="15dp" />
 
@@ -29,9 +29,4 @@
             android:layout_marginLeft="15dp"
             app:srcCompat="@drawable/ic_back_24" />
     </RelativeLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcv_history"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/_realative"
-        android:layout_height="match_parent"/>
 </RelativeLayout>
