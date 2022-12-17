@@ -20,13 +20,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.fastfooddelivery2025.Adapter.FunctionUser_Adapter;
 import com.example.fastfooddelivery2025.Data.DataSharedPreferences;
+import com.example.fastfooddelivery2025.HistoryActivity;
 import com.example.fastfooddelivery2025.LoginActivity;
 import com.example.fastfooddelivery2025.MainActivity;
 import com.example.fastfooddelivery2025.Model.FunctionUser;
 import com.example.fastfooddelivery2025.Model.Order_FB;
+import com.example.fastfooddelivery2025.Model.Staff;
+import com.example.fastfooddelivery2025.Model.User;
 import com.example.fastfooddelivery2025.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -50,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class UserFragment extends Fragment {
@@ -61,6 +66,7 @@ public class UserFragment extends Fragment {
     private RecyclerView rcv_fun;
     private ProgressBar progressFun;
     private BarChart barChart;
+    private TextView tv_name_user,tv_phone_user,tv_id_user;
     List<BarEntry> entries = new ArrayList<>();
 
     @Nullable
@@ -71,6 +77,16 @@ public class UserFragment extends Fragment {
         rcv_fun = mView.findViewById(R.id.rcv_fun);
         progressFun = mView.findViewById(R.id.progressFun);
         barChart = mView.findViewById(R.id.barChart);
+        tv_name_user = mView.findViewById(R.id.tv_name_user);
+        tv_phone_user = mView.findViewById(R.id.tv_phone_user);
+        tv_id_user = mView.findViewById(R.id.tv_id_user);
+
+
+        Staff staff = DataSharedPreferences.getUser(getContext(),KeyUser);
+
+        tv_id_user.setText("ID"+staff.getId_staff());
+        tv_phone_user.setText("Phone:" +staff.getPhoneNumber());
+        tv_name_user.setText(staff.getFullName_staff().toUpperCase(Locale.ROOT));
 
         setupCharView();
         loadDataFunction_User();
@@ -200,7 +216,7 @@ public class UserFragment extends Fragment {
             public void Click(FunctionUser functionUser) {
                 int index = Integer.parseInt(functionUser.getId());
                 switch (index){
-                    case 1 :
+                    case 1 : startActivity(new Intent(getContext(), HistoryActivity.class));
                         break;
 
                     case 2 :
