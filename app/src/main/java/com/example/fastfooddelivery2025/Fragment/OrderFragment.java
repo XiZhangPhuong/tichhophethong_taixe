@@ -4,6 +4,7 @@ import static com.example.fastfooddelivery2025.InitData.referenceHistory;
 import static com.example.fastfooddelivery2025.InitData.referenceOrder;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -159,40 +160,46 @@ public class OrderFragment extends Fragment {
         btn_dagiao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkdung = true;
-                orderAdapter = new OrderAdapter(getContext(),new ArrayList<>());
-                rcv_order.setAdapter(orderAdapter);
-                orderAdapter.notifyDataSetChanged();
-                txt_name.setText(" ");
-                txt_phone.setText(" ");
-                txt_address.setText(" ");
-                txt_total.setText(" ");
-                btn_dismiss.setVisibility(View.VISIBLE);
-                btn_confirm.setVisibility(View.VISIBLE);
-                btn_dagiao.setVisibility(View.GONE);
+                new AlertDialog.Builder(getContext()).setTitle("Cảnh báo").setMessage("Bạn đã chắc chắn chưa!").setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int q) {
+                        checkdung = true;
+                        orderAdapter = new OrderAdapter(getContext(),new ArrayList<>());
+                        rcv_order.setAdapter(orderAdapter);
+                        orderAdapter.notifyDataSetChanged();
+                        txt_name.setText(" ");
+                        txt_phone.setText(" ");
+                        txt_address.setText(" ");
+                        txt_total.setText(" ");
+                        btn_dismiss.setVisibility(View.VISIBLE);
+                        btn_confirm.setVisibility(View.VISIBLE);
+                        btn_dagiao.setVisibility(View.GONE);
 
-                if(checktaixe){
-                    order_fb.setCheck(3);
-                    referenceOrder.child(order_fb.getId_order()).setValue(order_fb);
-                    referenceHistory.child(order_fb.getId_order()).setValue(order_fb);
-                    referenceOrder.child(order_fb.getId_order()).removeValue();
-                    return;
-                }
+                        if(checktaixe){
+                            order_fb.setCheck(3);
+                            referenceOrder.child(order_fb.getId_order()).setValue(order_fb);
+                            referenceHistory.child(order_fb.getId_order()).setValue(order_fb);
+                            referenceOrder.child(order_fb.getId_order()).removeValue();
+                            return;
+                        }
 
-                Order_FB fb = list.get(i);
-                fb.setCheck(3);
-                referenceOrder.child(fb.getId_order()).setValue(fb);
-                referenceHistory.child(order_fb.getId_order()).setValue(order_fb);
-                referenceOrder.child(order_fb.getId_order()).removeValue();
-                i++;
-                if(list.size() - 1 < i)
-                    i = 0;
-                if(list.size() == 0) {
-                    return;
-                }
-                orderAdapter = new OrderAdapter(getContext(), list.get(i).getListFood());
-                rcv_order.setAdapter(orderAdapter);
-                orderAdapter.notifyDataSetChanged();
+                        Order_FB fb = list.get(i);
+                        fb.setCheck(3);
+                        referenceOrder.child(fb.getId_order()).setValue(fb);
+                        referenceHistory.child(fb.getId_order()).setValue(order_fb);
+                        referenceOrder.child(fb.getId_order()).removeValue();
+                        i++;
+                        if(list.size() - 1 < i)
+                            i = 0;
+                        if(list.size() == 0) {
+                            return;
+                        }
+                        orderAdapter = new OrderAdapter(getContext(), list.get(i).getListFood());
+                        rcv_order.setAdapter(orderAdapter);
+                        orderAdapter.notifyDataSetChanged();
+                    }
+                }).setNegativeButton("no",null).create().show();
+
 
             }
         });

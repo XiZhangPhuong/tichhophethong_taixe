@@ -1,7 +1,7 @@
 package com.example.fastfooddelivery2025.Fragment;
 
+import static com.example.fastfooddelivery2025.InitData.KeyUser;
 import static com.example.fastfooddelivery2025.InitData.referenceHistory;
-import static com.example.fastfooddelivery2025.MainActivity.KeyUser;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.example.fastfooddelivery2025.AcountActivity;
 import com.example.fastfooddelivery2025.Adapter.FunctionUser_Adapter;
 import com.example.fastfooddelivery2025.Data.DataSharedPreferences;
+import com.example.fastfooddelivery2025.HelpCenterActivity;
 import com.example.fastfooddelivery2025.HistoryActivity;
 import com.example.fastfooddelivery2025.LoginActivity;
 import com.example.fastfooddelivery2025.MainActivity;
@@ -93,12 +94,6 @@ public class UserFragment extends Fragment {
         setupCharView();
         loadDataFunction_User();
         return mView;
-    }
-    private int getMonth(){
-        java.util.Date date= new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return cal.get(Calendar.MONTH);
     }
 
 
@@ -222,7 +217,7 @@ public class UserFragment extends Fragment {
                     case 5: startActivity(new Intent(getContext(), AcountActivity.class));
                         break;
 
-                    case 6:
+                    case 6: startActivity(new Intent(getContext(), HelpCenterActivity.class));
                         break;
 
                     case 7:

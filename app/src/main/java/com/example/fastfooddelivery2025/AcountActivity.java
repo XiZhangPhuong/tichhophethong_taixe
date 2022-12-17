@@ -1,7 +1,8 @@
 package com.example.fastfooddelivery2025;
 
+import static com.example.fastfooddelivery2025.InitData.KeyUser;
 import static com.example.fastfooddelivery2025.InitData.referenceAccountEmployee;
-import static com.example.fastfooddelivery2025.MainActivity.KeyUser;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.fastfooddelivery2025.Data.DataSharedPreferences;
@@ -19,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class AcountActivity extends AppCompatActivity {
     private EditText edt_password,edt_confirmPassword,edt_oldPassword;
     private Button btn_change;
+    private ImageView img_back_account;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +31,14 @@ public class AcountActivity extends AppCompatActivity {
         edt_confirmPassword = findViewById(R.id.edt_confirmPassword);
         edt_oldPassword = findViewById(R.id.edt_oldPassword);
         btn_change = findViewById(R.id.btn_change);
+        img_back_account = findViewById(R.id.img_back_account);
 
+        img_back_account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         btn_change.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 private ViewPager2 viewPager2;
 private MainPager mainPager;
 private BottomNavigationView bottomNavigationView;
-public static String KeyUser = "Key_Staff";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
