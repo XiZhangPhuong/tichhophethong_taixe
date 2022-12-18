@@ -1,5 +1,6 @@
 package com.example.fastfooddelivery2025.Fragment;
 
+import static com.example.fastfooddelivery2025.InitData.KeyUser;
 import static com.example.fastfooddelivery2025.InitData.referenceHistory;
 import static com.example.fastfooddelivery2025.InitData.referenceOrder;
 
@@ -131,7 +132,7 @@ public class OrderFragment extends Fragment {
                 btn_dismiss.setVisibility(View.GONE);
                 btn_confirm.setVisibility(View.GONE);
                 btn_dagiao.setVisibility(View.VISIBLE);
-                Staff taixe = DataSharedPreferences.getUser(getContext(), "DRIVER");
+                Staff taixe = DataSharedPreferences.getUser(getContext(), KeyUser);
 
                 Order_FB fb = list.get(i);
                 fb.getStaff().setId_staff(taixe.getId_staff());

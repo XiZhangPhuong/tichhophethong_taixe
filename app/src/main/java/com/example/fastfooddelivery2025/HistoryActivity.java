@@ -29,7 +29,7 @@ public class HistoryActivity extends AppCompatActivity {
     private RecyclerView rcv_history;
     private HistoryAdapter mHistoryAdapter;
     private ImageView img_back;
-    private Staff staff = DataSharedPreferences.getUser(HistoryActivity.this,KeyUser);
+    private Staff staff;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +42,7 @@ public class HistoryActivity extends AppCompatActivity {
         rcv_history.setLayoutManager(linearLayoutManager);
         rcv_history.setAdapter(mHistoryAdapter);
 
+        staff = DataSharedPreferences.getUser(getApplicationContext(),KeyUser);
 
 
         img_back.setOnClickListener(new View.OnClickListener() {
